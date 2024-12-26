@@ -3,13 +3,13 @@ import { NextResponse } from "next/server";
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
   const { pathname } = request.nextUrl;
-  const isLoginPage = pathname.startsWith("/auth/login");
   const isCookieExist = !!request.cookies.get("user_token");
+  const PUBLIC_ROUTES = ["/auth/login", "/auth/register"];
   //   jika cookie TIDAK ada dan user sedang dihalaman private route => redirect ke '/auth/login'
-  if (!isLoginPage && !isCookieExist) {
+  if (!PUBLIC_ROUTES.includes(pathname) && !isCookieExist) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-  if (isCookieExist && isLoginPage) {
+  if (isCookieExist && PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();

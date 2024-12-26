@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {  usePostLogin, usePostRegister } from "../useMutate";
+import { usePostLogin, usePostLogout, usePostRegister } from "../useMutate";
 import { useRouter } from "next/router";
 import { useSendServiceLogin } from "../useServiceLogin";
 
@@ -16,8 +16,8 @@ export const useAuthFunction = () => {
   const route = useRouter();
   const [state, setState] = useState({ ...INITIAL_STATE });
   const { postData: postDataLogin, state: dataLogin } = usePostLogin();
-  const {postData: postDataRegister, state: dataRegister} = usePostRegister()
-
+  const { postData: postDataRegister, state: dataRegister } = usePostRegister();
+  const { postData: postDataLogout, state: dataLogout } = usePostLogout();
 
   const handleChange = (event) => {
     const { name, value, type } = event.target;
@@ -69,9 +69,16 @@ export const useAuthFunction = () => {
   };
 
   const loginOauth = () => {
-    toast.error(
-      "Tombol ini belum berfungsi. Aplikasi masih dalam tahap pengembangan. Silakan klik tombol 'Create Account' secara manual untuk melanjutkan pendaftaran!"
+    toast(
+      "Tombol ini belum berfungsi. Aplikasi masih dalam tahap pengembangan. Silakan klik tombol 'Create Account' atau 'Login' secara manual!",
+      {
+        duration: 6000,
+      }
     );
+  };
+
+  const onSubmitLogout = async () => {
+    await postDataLogout("/logout", null, "logout");
   };
 
   return {
@@ -80,6 +87,7 @@ export const useAuthFunction = () => {
     selectImage,
     dataLogin,
     dataRegister,
+    dataLogout,
     function: {
       setImage,
       setSelectImage,
@@ -87,6 +95,7 @@ export const useAuthFunction = () => {
       onSubmit,
       loginOauth,
       onSubmitLogin,
+      onSubmitLogout,
     },
   };
 };

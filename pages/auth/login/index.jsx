@@ -117,6 +117,7 @@ const Login = () => {
               <ButtonText
                 label="Login"
                 isLoading={dataLogin?.isLoading}
+                isDisable={dataLogin?.isLoading}
                 styleContainer="bg-[#6E54B5]"
               />
             </form>
@@ -130,12 +131,14 @@ const Login = () => {
                 label="Google"
                 icon={<FcGoogle size={20} />}
                 onPress={loginOauth}
+                isDisable={dataLogin?.isLoading}
               />
               <ButtonTextImage
                 label="Apple"
                 icon={<FaApple size={20} fill="white" />}
                 onPress={loginOauth}
                 type="submit"
+                isDisable={dataLogin?.isLoading}
               />
             </div>
           </div>

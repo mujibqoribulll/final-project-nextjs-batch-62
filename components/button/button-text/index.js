@@ -1,8 +1,10 @@
 const ButtonText = (props) => {
-  const { styleContainer, label, isLoading } = props;
+  const { styleContainer, label, isLoading, onPress, isDisable } = props;
   return (
     <button
       className={`${styleContainer} flex flex-row justify-center items-center gap-x-3 text-white rounded-lg`}
+      onClick={onPress}
+      disabled={isDisable}
     >
       <h3 className="text-white text-lg p-2 font-mono">{label}</h3>
       {isLoading && (

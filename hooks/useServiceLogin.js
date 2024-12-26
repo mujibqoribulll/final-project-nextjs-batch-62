@@ -12,8 +12,10 @@ export const INITIAL_STATE = {
 export const useSendServiceLogin = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const route = useRouter();
-  const service = async (path, payload) => {
+  const service = async (path, payload, type = "login") => {
+    const token = Cookies.get("user_token");
     try {
+      let body = type === "login" && { body: JSON.stringify(payload) };
       setState((prevState) => ({
         ...prevState,
         isLoading: true,
@@ -24,19 +26,29 @@ export const useSendServiceLogin = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload),
+          ...body,
         }
       );
       const result = await response.json();
       const { success, message, data } = result;
       if (!success) {
         toast.error(message);
+        setState((prevState) => ({
+          ...prevState,
+          isLoading: false,
+        }));
       } else {
-        Cookies.set("user_token", data?.token, {
-          expires: new Date(data?.expires_at),
-        });
-        route.push("/");
+        if (type === "login") {
+          Cookies.set("user_token", data?.token, {
+            expires: new Date(data?.expires_at),
+          });
+          route.push("/");
+        } else {
+          Cookies.remove("user_token", { path: "/" });
+          route.push("/auth/login");
+        }
         setState((prevState) => ({
           ...prevState,
           isLoading: false,
