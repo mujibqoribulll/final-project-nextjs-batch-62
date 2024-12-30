@@ -6,13 +6,22 @@ import { FaRegComments } from "react-icons/fa";
 import ButtonTextImage from "../button/button-text-image";
 
 const Card = (props) => {
-  const { icon, data, onPressReplies, dataReplies} = props;
+  const {
+    icon,
+    data,
+    onPressReplies,
+    dataReplies,
+    onPressLikeOrUnlike,
+    nameProfile,
+  } = props;
   let newDate = new Date(data?.created_at);
   return (
     <div className="bg-white lg:rounded-lg p-3">
       <div className="flex flex-row items-center justify-between gap-x-3">
         <div className="flex flex-row gap-x-3">
-          <div className="bg-[#6E54B5] w-[50px] h-[50px] rounded-full" />
+          <div className="bg-[#6E54B5] w-[50px] h-[50px] rounded-full flex justify-center items-center">
+            <h3 className="text-white text-lg font-mono">{nameProfile}</h3>
+          </div>
           <div>
             <h3 className="font-mono font-bold text-lg">
               {data?.user?.name || "Unknow"}
@@ -40,6 +49,12 @@ const Card = (props) => {
               <FcLike size={20} />
             ) : (
               <IoHeartDislikeSharp size={20} />
+            )
+          }
+          onPress={() =>
+            onPressLikeOrUnlike(
+              data?.is_like_post ? "like" : "unlike",
+              data?.id
             )
           }
           styleContainer="border-0 w-20"

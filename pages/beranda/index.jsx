@@ -3,7 +3,7 @@ import Modal from "@/components/modal";
 import Navigation from "@/components/navigation";
 import { useBerandaFUnction } from "@/hooks/beranda";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { RiMenuUnfold2Line } from "react-icons/ri";
 const LayoutComponents = dynamic(() => import("@/components/layout"), {
   ssr: false,
@@ -31,8 +31,9 @@ const Beranda = () => {
     setShowDropDown,
     stateDeleteDataReplies,
     onDeleteReplies,
+    onPressLikeOrUnlike,
   } = useBerandaFUnction();
-  
+
   let newDate = new Date(stateDataProfile?.data?.created_at);
 
   const onGetTodos = async () => {
@@ -51,13 +52,26 @@ const Beranda = () => {
     onFetch();
   }, []);
 
+  const trimName = (name) => {
+    let newName = name;
+    let result = newName?.split(" ")?.map((item) => item[0]);
+    return result;
+  };
+
+  const resultName = useMemo(
+    () => trimName(stateDataProfile?.data?.name),
+    [stateDataProfile?.data?.name]
+  );
+
   return (
     <LayoutComponents metaTitle="Beranda">
       <div className="lg:flex flex-row justify-center gap-x-3  px-3">
-        <div className="bg-white lg:rounded-lg h-fit lg:max-w-96 mb-3 lg:mb-0 pb-3 sticky top-3">
+        <div className="bg-white lg:rounded-lg h-fit lg:max-w-96 w-full mb-3 lg:mb-0 pb-3 sticky top-3">
           <div className=" flex flex-col items-center gap-x-3 relative">
             <div className="bg-gray-900/50 w-full h-12 absolute inset-0 lg:rounded-t-lg" />
-            <div className="bg-[#6E54B5] w-[50px] h-[50px] rounded-full p-8 z-10 mt-3" />
+            <div className="bg-[#6E54B5] w-[50px] h-[50px] rounded-full p-8 z-10 mt-3 flex justify-center items-center">
+              <h3 className="text-2xl text-white font-mono">{resultName}</h3>
+            </div>
             <h2 className="font-mono font-bold text-xl line-clamp-1 px-5">
               {stateDataProfile?.data?.name || "Jhon Doe"}
             </h2>
@@ -105,6 +119,8 @@ const Beranda = () => {
                   data={item}
                   onPressReplies={getAllDataReplies}
                   dataReplies={stateDataReplies}
+                  onPressLikeOrUnlike={onPressLikeOrUnlike}
+                  nameProfile={resultName}
                 />
               ))
             )

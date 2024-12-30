@@ -4,6 +4,7 @@ import {
   getMyProfile,
   getReplies,
   useDeleteReplies,
+  usePostLike,
   usePostReplies,
 } from "../useMutate";
 
@@ -29,6 +30,8 @@ export const useBerandaFUnction = () => {
   const { deleteData: deleteDataReplies, state: stateDeleteDataReplies } =
     useDeleteReplies();
 
+  const { postData: postDataLike, state: statePostDataLike } = usePostLike();
+
   const [state, setState] = useState({
     replies: "",
   });
@@ -36,7 +39,7 @@ export const useBerandaFUnction = () => {
   const [selectIdComment, setSelectedIdComment] = useState(null);
   const [selectedReplies, setSelectedReplies] = useState(null);
   const [showDropdown, setShowDropDown] = useState(false);
-
+  const [typePost, seStypePost] = useState("all");
   const [modal, setModal] = useState(false);
 
   const closeModal = () => {
@@ -48,11 +51,12 @@ export const useBerandaFUnction = () => {
   };
 
   const getData = async (type) => {
+    seStypePost(type || "all");
     await getAllData(`${API_URL}/posts?type=${type}`);
   };
 
   const getAllDataReplies = async (id) => {
-    setModal(true);
+    setModal(true); //pikirin nanti logicnya biar tidak tabrakan
     setSelectedIdComment(id);
     await getDataReplies(`${API_URL}/replies/post/${id}`);
   };
@@ -88,6 +92,12 @@ export const useBerandaFUnction = () => {
     }
   }, [stateDeleteDataReplies?.isSuccess]);
 
+  useEffect(() => {
+    if (statePostDataLike.isSuccess) {
+      getData(typePost);
+    }
+  }, [statePostDataLike.isSuccess]);
+
   const onPressMoreOption = (id) => {
     if (id === selectedReplies) {
       setSelectedReplies(null);
@@ -109,6 +119,14 @@ export const useBerandaFUnction = () => {
     }
     if (stateDeleteDataReplies?.isSuccess) {
       actionRefresh();
+    }
+  };
+
+  const onPressLikeOrUnlike = async (type, id) => {
+    if (type === "unlike") {
+      await postDataLike(`${API_URL}/likes/post/${id}`);
+    } else {
+      await postDataLike(`${API_URL}/unlikes/post/${id}`);
     }
   };
 
@@ -134,5 +152,6 @@ export const useBerandaFUnction = () => {
     setShowDropDown,
     stateDeleteDataReplies,
     onDeleteReplies,
+    onPressLikeOrUnlike,
   };
 };

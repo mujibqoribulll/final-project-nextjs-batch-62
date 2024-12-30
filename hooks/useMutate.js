@@ -69,3 +69,9 @@ export const useDeleteReplies = () => {
 
   return { state, deleteData: (path) => service(path), reset };
 };
+
+export const usePostLike = () => {
+  const { reset, service, state } = usePostServiceTodos();
+
+  return { state, postData: (path, payload) => service(path, payload), reset };
+};
