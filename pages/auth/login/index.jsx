@@ -30,7 +30,7 @@ const Login = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  
+  console.log("images[selectImage]?.src", images[selectImage]?.src);
   return (
     <div className="bg-[#676279] h-screen lg:flex justify-center items-center">
       <div className="flex lg:flex-row flex-col md:mx-10 lg:mx-0 justify-center items-center bg-[#2B2738] py-3 pr-10 pl-3 gap-x-20 lg:rounded-lg h-screen lg:h-auto">
