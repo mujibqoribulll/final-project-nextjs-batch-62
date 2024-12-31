@@ -97,3 +97,9 @@ export const useGetDetailPost = () => {
 
   return { state, getData: (path) => service(path), reset };
 };
+
+export const useGetNotifications = () => {
+  const { reset, service, state } = useGetServiceTodos();
+
+  return { state, getData: (path) => service(path), reset };
+};

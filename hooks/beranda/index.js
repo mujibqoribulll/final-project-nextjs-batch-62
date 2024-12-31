@@ -6,6 +6,7 @@ import {
   useDeletePost,
   useDeleteReplies,
   useGetDetailPost,
+  useGetNotifications,
   usePost,
   usePostLike,
   usePostReplies,
@@ -43,6 +44,12 @@ export const useBerandaFUnction = () => {
   const { getData: getDataPostDetail, state: getDataStateDetail } =
     useGetDetailPost();
 
+  const {
+    getData: getDataNotifications,
+    state: stateDataNotifications,
+    reset: resetDataNotifications,
+  } = useGetNotifications();
+
   const [state, setState] = useState({
     replies: "",
   });
@@ -56,7 +63,9 @@ export const useBerandaFUnction = () => {
   const [modal, setModal] = useState(false);
   const [modalPost, setModalPost] = useState(false);
   const [modalConfirmation, setModalConfirmation] = useState(false);
+  const [modalLogout, setModalLogout] = useState(false);
   const [postFrom, setPostFrom] = useState("");
+  const [showNotif, setShowNotif] = useState(false);
 
   const openModalPost = (id) => {
     setShowDropDownPost(!showDropdownPost);
@@ -76,6 +85,14 @@ export const useBerandaFUnction = () => {
   };
   const closeModalConfirmation = () => {
     setModalConfirmation(!modalConfirmation);
+  };
+
+  const closeModalLogout = () => {
+    setModalLogout(!modalLogout);
+  };
+
+  const openModalLogin = () => {
+    setModalLogout(true);
   };
 
   const openModalConfirmation = () => {
@@ -99,8 +116,12 @@ export const useBerandaFUnction = () => {
     await getAllData(`${API_URL}/posts?type=${type}`);
   };
 
+  const getNotifications = () => {
+    getDataNotifications(`${API_URL}/notifications`);
+  };
+
   const getAllDataReplies = async (id) => {
-    setModal(true); //pikirin nanti logicnya biar tidak tabrakan
+    setModal(true);
     setSelectedIdComment(id);
     setShowDropDownPost(false);
     await getDataReplies(`${API_URL}/replies/post/${id}`);
@@ -225,11 +246,19 @@ export const useBerandaFUnction = () => {
     setShowDropDownPost(false);
   };
 
-  const onPresDeletePost = () => {
+  const onPresDeletePost = async () => {
     if (selectPostId !== null) {
-      deleteData(`${API_URL}/post/delete/${selectPostId}`);
+      await deleteData(`${API_URL}/post/delete/${selectPostId}`);
       setSelectPostId(null);
+      setShowDropDownPost(false);
       closeModalConfirmation();
+    }
+  };
+
+  const getNotificationsData = () => {
+    setShowNotif(!showNotif);
+    if (stateDataNotifications?.data?.length === 0) {
+      getNotifications();
     }
   };
 
@@ -269,5 +298,11 @@ export const useBerandaFUnction = () => {
     openModalConfirmation,
     onPresDeletePost,
     openPostModal,
+    stateDataNotifications,
+    showNotif,
+    getNotificationsData,
+    closeModalLogout,
+    modalLogout,
+    openModalLogin,
   };
 };

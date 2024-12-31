@@ -44,7 +44,7 @@ export const useSendServiceLogin = () => {
           Cookies.set("user_token", data?.token, {
             expires: new Date(data?.expires_at),
           });
-          route.push("/");
+          route.push("/beranda");
         } else {
           Cookies.remove("user_token", { path: "/" });
           route.push("/auth/login");

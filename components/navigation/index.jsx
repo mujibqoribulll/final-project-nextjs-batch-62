@@ -6,7 +6,7 @@ const Navigation = () => {
       <h2 className="font-mono font-bold text-xl line-clamp-1 ">Navigations</h2>
       <ul className="">
         <li className="text-sm font-mono">Notifications</li>
-        <li className="text-sm font-mono">All Posts</li>
+        <li className="text-sm font-mono">My Post</li>
         <li className="text-sm font-mono">All Posts</li>
       </ul>
     </div>

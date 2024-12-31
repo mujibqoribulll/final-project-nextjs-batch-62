@@ -2,7 +2,7 @@ import React from "react";
 import ButtonText from "../button/button-text";
 
 const ModalConfirmation = (props) => {
-  const { isOpen, onClose, onPressYes } = props;
+  const { isOpen, onClose, onPressYes, label } = props;
 
   if (!isOpen) {
     document.body.classList.remove("overflow-hidden");
@@ -21,7 +21,7 @@ const ModalConfirmation = (props) => {
       >
         <div className="mt-3">
           <h3 className="text-sm font-semibold font-mono text-center">
-            Are you seure ?
+            {label}
           </h3>
           <div className=" flex justify-center items-center gap-x-3 mt-3">
             <ButtonText
