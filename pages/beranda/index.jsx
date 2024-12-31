@@ -1,11 +1,22 @@
 import Card from "@/components/card";
-import Modal from "@/components/modal";
+import ModalConfirmation from "@/components/modal-confirmation";
 import Navigation from "@/components/navigation";
 import { useBerandaFUnction } from "@/hooks/beranda";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo } from "react";
 import { RiMenuUnfold2Line } from "react-icons/ri";
 const LayoutComponents = dynamic(() => import("@/components/layout"), {
+  ssr: false,
+});
+
+const FormPost = dynamic(() => import("@/components/form-post"), {
+  ssr: false,
+});
+const ModalPost = dynamic(() => import("@/components/modal-post"), {
+  ssr: false,
+});
+
+const Modal = dynamic(() => import("@/components/modal"), {
   ssr: false,
 });
 
@@ -32,6 +43,18 @@ const Beranda = () => {
     stateDeleteDataReplies,
     onDeleteReplies,
     onPressLikeOrUnlike,
+    setModalPost,
+    modalPost,
+    closeModalPost,
+    onSubmitPost,
+    showDropdownPost,
+    openModalPost,
+    selectPostId,
+    modalConfirmation,
+    closeModalConfirmation,
+    openModalConfirmation,
+    onPresDeletePost,
+    openPostModal,
   } = useBerandaFUnction();
 
   let newDate = new Date(stateDataProfile?.data?.created_at);
@@ -105,7 +128,17 @@ const Beranda = () => {
             </ul>
           </div>
         </div>
+
         <div className="flex flex-col gap-y-3 lg:min-w-[50rem] ">
+          <div className="bg-white flex justify-center items-center  py-5 px-3 gap-x-3 sticky top-3 lg:rounded-lg ">
+            <div className="bg-[#6E54B5] w-[50px] h-[50px] rounded-full flex justify-center items-center">
+              <h3 className="text-white text-lg font-mono">{resultName}</h3>
+            </div>
+            <FormPost
+              onPress={() => openPostModal("new-post")}
+              name={stateDataProfile?.data?.name}
+            />
+          </div>
           {stateAllData?.data?.length > 0 ? (
             stateAllData?.isLoading ? (
               <div className="flex flex-row  justify-center">
@@ -121,6 +154,12 @@ const Beranda = () => {
                   dataReplies={stateDataReplies}
                   onPressLikeOrUnlike={onPressLikeOrUnlike}
                   nameProfile={resultName}
+                  showDropdownPost={showDropdownPost}
+                  openModalPost={openModalPost}
+                  selectPostId={selectPostId}
+                  openModalConfirmation={openModalConfirmation}
+                  setModalPost={setModalPost}
+                  openPostModal={openPostModal}
                 />
               ))
             )
@@ -146,6 +185,19 @@ const Beranda = () => {
         setShowDropDown={setShowDropDown}
         onDeleteReplies={onDeleteReplies}
         stateDeleteDataReplies={stateDeleteDataReplies}
+      />
+      <ModalPost
+        isOpen={modalPost}
+        state={state}
+        name={stateDataProfile?.data?.name}
+        onClose={closeModalPost}
+        onChangeText={onChangeText}
+        onSubmitPost={onSubmitPost}
+      />
+      <ModalConfirmation
+        isOpen={modalConfirmation}
+        onClose={closeModalConfirmation}
+        onPressYes={onPresDeletePost}
       />
     </LayoutComponents>
   );

@@ -64,7 +64,7 @@ export const useGetServiceTodos = () => {
 export const usePostServiceTodos = () => {
   const [state, setState] = useState({ ...INITIAL_STATE, isSuccess: false });
 
-  const service = async (path, payload) => {
+  const service = async (path, payload, method = "POST") => {
     try {
       const token = Cookies.get("user_token");
       setState((prevState) => ({
@@ -73,7 +73,7 @@ export const usePostServiceTodos = () => {
         isSuccess: false,
       }));
       const response = await fetch(path, {
-        method: "POST",
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

@@ -4,6 +4,7 @@ import { FcLike } from "react-icons/fc";
 import { IoHeartDislikeSharp } from "react-icons/io5";
 import { FaRegComments } from "react-icons/fa";
 import ButtonTextImage from "../button/button-text-image";
+import ButtonText from "../button/button-text";
 
 const Card = (props) => {
   const {
@@ -13,6 +14,12 @@ const Card = (props) => {
     dataReplies,
     onPressLikeOrUnlike,
     nameProfile,
+    showDropdownPost,
+    openModalPost,
+    selectPostId,
+    openModalConfirmation,
+    setModalPost,
+    openPostModal,
   } = props;
   let newDate = new Date(data?.created_at);
   return (
@@ -32,7 +39,28 @@ const Card = (props) => {
             </h4>
           </div>
         </div>
-        <ButtonImage icon={icon} />
+        <div className="relative">
+          {data?.is_own_post && (
+            <ButtonImage icon={icon} onPress={() => openModalPost(data?.id)} />
+          )}
+
+          {showDropdownPost && selectPostId === data?.id && (
+            <div className="absolute -left-[90px] -top-[20px] flex flex-col gap-1 bg-gray-500/20 p-2 rounded-xl">
+              <ButtonText
+                styleContainer="bg-red-500"
+                label="Delete"
+                styleText="text-sm py-1 px-3"
+                onPress={openModalConfirmation}
+              />
+              <ButtonText
+                styleContainer="bg-[#6E54B5]"
+                label="Edit"
+                styleText="text-sm py-1 px-3"
+                onPress={() => openPostModal("edit-post")}
+              />
+            </div>
+          )}
+        </div>
       </div>
       <div className="py-3">
         <p className="leading-8 text-sm font-mono ">{data?.description}</p>

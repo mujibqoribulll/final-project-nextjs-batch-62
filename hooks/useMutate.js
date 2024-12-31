@@ -75,3 +75,25 @@ export const usePostLike = () => {
 
   return { state, postData: (path, payload) => service(path, payload), reset };
 };
+
+export const usePost = () => {
+  const { reset, service, state } = usePostServiceTodos();
+
+  return { state, postData: (path, payload, method) => service(path, payload, method), reset };
+};
+
+export const useDeletePost = () => {
+  const { reset, service, state } = useDeleteServiceTodos();
+
+  return {
+    state,
+    deleteData: (path) => service(path),
+    reset,
+  };
+};
+
+export const useGetDetailPost = () => {
+  const { reset, service, state } = useGetServiceTodos();
+
+  return { state, getData: (path) => service(path), reset };
+};
