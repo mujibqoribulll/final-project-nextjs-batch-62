@@ -38,7 +38,7 @@ const Login = () => {
           <div className=" flex relative overflow-hidden">
             <Image
               src={images[selectImage]?.src}
-              alt="image"
+              alt={images[selectImage]?.alt}
               objectPosition="center"
               layout="responsive"
               quality={100}
